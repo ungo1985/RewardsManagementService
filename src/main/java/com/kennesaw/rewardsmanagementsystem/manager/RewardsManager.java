@@ -31,7 +31,7 @@ public class RewardsManager {
 			response.setCustomerInfo(customerInfo);
 			response.setPurchaseInfo(purchaseInfo);
 			
-			if(customerInfo.getCustomerId() == null && purchaseInfo.getPurchasedItems().isEmpty()) {
+			if(customerInfo.getFirstName() == null && purchaseInfo.getPurchasedItems().isEmpty()) {
 				response.setErrorResponse(getErrorResponse(Constants.CODE_RESOURCE_NOT_AVAILABLE, Constants.MESSAGE_RESOURCE_NOT_AVAILABLE));
 			}
 		}

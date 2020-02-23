@@ -24,6 +24,7 @@ public class Repository {
 	
 	public CustomerInfo getCustomerInformation(String vipId) throws SQLException {
 		CustomerInfo customerInfo = new CustomerInfo();
+		customerInfo.setCustomerId(vipId);
 		//try {
 
 			Connection con = getDatabaseConnection();
@@ -31,7 +32,7 @@ public class Repository {
 			ResultSet rs = stmt.executeQuery(buildSelectSqlStatementForCustomerInfo(vipId));
 
 			if(rs.next()){
-				customerInfo = new CustomerInfo(rs.getString(1), rs.getString(2), rs.getString(3), 
+				customerInfo = new CustomerInfo(vipId, rs.getString(2), rs.getString(3), 
 						rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getDate(8), rs.getString(9), rs.getInt(10));
 			}
 			closeDatabaseConnection(con, stmt);
@@ -41,14 +42,14 @@ public class Repository {
 	}
 	
 	public String buildSelectSqlStatementForCustomerInfo(String vipId){
-		String sql =  "select customer_id, first_name, last_name, street_address, city, state, zip_code, birthday, gold_status_flag, points from customer_info where customer_id in ( '" + vipId + "' )";
+		String sql =  "select customer_id, first_name, last_name, street_address, city, state, zip_code, birthday, gold_status_flag, points from customer_info where customer_id in ( '" + vipId.toUpperCase() + "' )";
 		LOGGER.info("buildSelectSqlStatement: " + sql);
 		return sql;
 	}
 	
 	public String buildSelectSqlStatementForPurchaseInfo(String vipId){
 		String sql = "select items.available_item, items.price, items.type, purchased_items.purchased_date, purchased_items.pre_ordered_flag, purchased_items.customer_id\r\n" + 
-				     "from rms.items JOIN rms.purchased_items ON items.item_id = purchased_items.item_id and purchased_items.customer_id = '" + vipId + "'";
+				     "from rms.items JOIN rms.purchased_items ON items.item_id = purchased_items.item_id and purchased_items.customer_id = '" + vipId.toUpperCase() + "'";
 		LOGGER.info("buildSelectSqlStatementForPurchaseInfo: " + sql);
 		return sql;
 	}

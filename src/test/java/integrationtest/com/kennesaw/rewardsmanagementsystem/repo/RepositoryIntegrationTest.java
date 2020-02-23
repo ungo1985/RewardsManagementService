@@ -37,7 +37,7 @@ public class RepositoryIntegrationTest {
 		String vipId = "TEST";
 		CustomerInfo customerInfo = repo.getCustomerInformation(vipId);
 		LOGGER.info("test_getCustomerInfo_Failure: " + customerInfo.getCustomerId());
-		Assert.assertNull(customerInfo.getCustomerId());
+		Assert.assertNull(customerInfo.getFirstName());
 	}
 	
 	@Test
