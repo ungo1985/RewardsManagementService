@@ -43,6 +43,8 @@ dependencies {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	testCompile group: 'junit', name: 'junit', version: '4.12'
+
 }
 
 dependencyManagement {
