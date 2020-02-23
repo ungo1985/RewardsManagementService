@@ -22,9 +22,9 @@ public class Repository {
 	
 	DatabaseConfig dbConfig = new DatabaseConfig();
 	
-	public CustomerInfo getCustomerInformation(String vipId) {
+	public CustomerInfo getCustomerInformation(String vipId) throws SQLException {
 		CustomerInfo customerInfo = new CustomerInfo();
-		try {
+		//try {
 
 			Connection con = getDatabaseConnection();
 			Statement stmt = getStatement(con);
@@ -35,8 +35,8 @@ public class Repository {
 						rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getDate(8), rs.getString(9), rs.getInt(10));
 			}
 			closeDatabaseConnection(con, stmt);
-		}
-		catch(SQLException e){e.printStackTrace();}	
+		//}
+		//catch(SQLException e){e.printStackTrace();}	
 		return customerInfo;
 	}
 	
@@ -70,14 +70,14 @@ public class Repository {
 		con.close();
 	}
 
-	public PurchaseInfo getPurchaseInfo(String vipId) {
+	public PurchaseInfo getPurchaseInfo(String vipId) throws SQLException {
 		
 		PurchaseInfo purchaseInfo = new PurchaseInfo();
 		purchaseInfo.setCustomerId(vipId);
 		List<Purchase> purchaseList = new ArrayList<Purchase>();
 		Purchase purchase = new Purchase();
 		
-		try {
+		//try {
 
 			Connection con = getDatabaseConnection();
 			Statement stmt = getStatement(con);
@@ -89,8 +89,8 @@ public class Repository {
 			}
 			closeDatabaseConnection(con, stmt);
 			purchaseInfo.setPurchasedItems(purchaseList);
-		}
-		catch(SQLException e){e.printStackTrace();}	
+		//}
+		//catch(SQLException e){e.printStackTrace();}	
 		return purchaseInfo;
 	}
 

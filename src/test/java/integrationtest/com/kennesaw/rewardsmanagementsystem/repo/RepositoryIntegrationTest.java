@@ -1,5 +1,6 @@
 package integrationtest.com.kennesaw.rewardsmanagementsystem.repo;
 
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import org.junit.Assert;
@@ -24,7 +25,7 @@ public class RepositoryIntegrationTest {
 	Repository repo;
 	
 	@Test
-	public void test_getCustomerInfo_Success() {
+	public void test_getCustomerInfo_Success() throws SQLException {
 		String vipId = "EXA6777";
 		CustomerInfo customerInfo = repo.getCustomerInformation(vipId);
 		LOGGER.info("test_getCustomerInfo_Success: " + customerInfo.getCustomerId());
@@ -32,7 +33,7 @@ public class RepositoryIntegrationTest {
 	}
 	
 	@Test
-	public void test_getCustomerInfo_Failure() {
+	public void test_getCustomerInfo_Failure() throws SQLException {
 		String vipId = "TEST";
 		CustomerInfo customerInfo = repo.getCustomerInformation(vipId);
 		LOGGER.info("test_getCustomerInfo_Failure: " + customerInfo.getCustomerId());
@@ -40,7 +41,7 @@ public class RepositoryIntegrationTest {
 	}
 	
 	@Test
-	public void test_getPurchaseInfo_Success() {
+	public void test_getPurchaseInfo_Success() throws SQLException {
 		String vipId = "EXA6777";
 		PurchaseInfo purchaseInfo = repo.getPurchaseInfo(vipId);
 		LOGGER.info("test_getPurchaseInfo_Success for: " + purchaseInfo.getCustomerId() + " " + purchaseInfo.getPurchasedItems().toString());
@@ -49,7 +50,7 @@ public class RepositoryIntegrationTest {
 	}
 	
 	@Test
-	public void test_getPurchaseInfo_Failure() {
+	public void test_getPurchaseInfo_Failure() throws SQLException {
 		String vipId = "TEST2";
 		PurchaseInfo purchaseInfo = repo.getPurchaseInfo(vipId);
 		LOGGER.info("test_getPurchaseInfo_Failure for: " + purchaseInfo.getCustomerId() + " " + purchaseInfo.getPurchasedItems());
