@@ -27,6 +27,7 @@ public class RewardsManager {
 		
 		try {
 			CustomerInfo customerInfo = repo.getCustomerInformation(vipId);
+			checkGoldStatus(customerInfo);
 			PurchaseInfo purchaseInfo = repo.getPurchaseInfo(vipId);
 			response.setCustomerInfo(customerInfo);
 			response.setPurchaseInfo(purchaseInfo);
@@ -45,6 +46,12 @@ public class RewardsManager {
 	
 	public ErrorResponse getErrorResponse(int code, String message) {
 		return new ErrorResponse(code, message);
+	}
+	
+	public void checkGoldStatus(CustomerInfo customer) {
+		if(customer.getPoints() >= Constants.goldStatusThreshold) {
+			customer.setGoldStatusFlag(Constants.goldStatus);
+		}
 	}
 	
 	

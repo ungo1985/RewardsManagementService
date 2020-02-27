@@ -14,6 +14,7 @@ import com.kennesaw.rewardsmanagementsystem.config.DatabaseConfig;
 import com.kennesaw.rewardsmanagementsystem.to.CustomerInfo;
 import com.kennesaw.rewardsmanagementsystem.to.Purchase;
 import com.kennesaw.rewardsmanagementsystem.to.PurchaseInfo;
+import com.kennesaw.rewardsmanagementsystem.util.Constants;
 
 @Component
 public class Repository {
@@ -25,24 +26,21 @@ public class Repository {
 	public CustomerInfo getCustomerInformation(String vipId) throws SQLException {
 		CustomerInfo customerInfo = new CustomerInfo();
 		customerInfo.setCustomerId(vipId);
-		//try {
 
 			Connection con = getDatabaseConnection();
 			Statement stmt = getStatement(con);
 			ResultSet rs = stmt.executeQuery(buildSelectSqlStatementForCustomerInfo(vipId));
 
 			if(rs.next()){
-				customerInfo = new CustomerInfo(vipId, rs.getString(2), rs.getString(3), 
-						rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getDate(8), rs.getString(9), rs.getInt(10));
+				customerInfo = new CustomerInfo(vipId, rs.getString("first_name"), rs.getString("last_name"), 
+						rs.getString("street_address"), rs.getString("city"), rs.getString("state"), rs.getString("zip_code"), rs.getDate("birthday"), Constants.defaultGoldStatus, rs.getInt("points"));
 			}
-			closeDatabaseConnection(con, stmt);
-		//}
-		//catch(SQLException e){e.printStackTrace();}	
+			closeDatabaseConnection(con, stmt);	
 		return customerInfo;
 	}
 	
 	public String buildSelectSqlStatementForCustomerInfo(String vipId){
-		String sql =  "select customer_id, first_name, last_name, street_address, city, state, zip_code, birthday, gold_status_flag, points from customer_info where customer_id in ( '" + vipId.toUpperCase() + "' )";
+		String sql =  "select customer_id, first_name, last_name, street_address, city, state, zip_code, birthday, points from customer_info where customer_id in ( '" + vipId.toUpperCase() + "' )";
 		LOGGER.info("buildSelectSqlStatement: " + sql);
 		return sql;
 	}
@@ -77,21 +75,17 @@ public class Repository {
 		purchaseInfo.setCustomerId(vipId);
 		List<Purchase> purchaseList = new ArrayList<Purchase>();
 		Purchase purchase = new Purchase();
-		
-		//try {
 
 			Connection con = getDatabaseConnection();
 			Statement stmt = getStatement(con);
 			ResultSet rs = stmt.executeQuery(buildSelectSqlStatementForPurchaseInfo(vipId));
 
 			while(rs.next()){
-				purchase = new Purchase(rs.getString(1), rs.getFloat(2), rs.getString(3), rs.getDate(4), rs.getString(5));
+				purchase = new Purchase(rs.getString("available_item"), rs.getFloat("price"), rs.getString("type"), rs.getDate("purchased_date"), rs.getString("pre_ordered_flag"));
 				purchaseList.add(purchase);
 			}
 			closeDatabaseConnection(con, stmt);
 			purchaseInfo.setPurchasedItems(purchaseList);
-		//}
-		//catch(SQLException e){e.printStackTrace();}	
 		return purchaseInfo;
 	}
 

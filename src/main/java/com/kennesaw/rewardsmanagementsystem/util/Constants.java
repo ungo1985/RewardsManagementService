@@ -7,5 +7,9 @@ public class Constants {
 	
 	public static final int CODE_SERVICE_ERROR = 500;
 	public static final String MESSAGE_SERVICE_ERROR = "SERVICE ERROR";
+	
+	public static final String defaultGoldStatus = "N";
+	public static final String goldStatus = "Y";
+	public static final int goldStatusThreshold = 1000;
 
 }
