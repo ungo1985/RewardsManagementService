@@ -1,5 +1,6 @@
 package integrationtest.com.kennesaw.rewardsmanagementsystem.repo;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
@@ -55,5 +56,47 @@ public class RepositoryIntegrationTest {
 		PurchaseInfo purchaseInfo = repo.getPurchaseInfo(vipId);
 		LOGGER.info("test_getPurchaseInfo_Failure for: " + purchaseInfo.getCustomerId() + " " + purchaseInfo.getPurchasedItems());
 		Assert.assertTrue(purchaseInfo.getPurchasedItems().size()==0);
+	}
+	
+	@Test
+	public void test_addNewCustomer_Success() throws SQLException {
+		Date birthdate = Date.valueOf("1992-09-20");
+		CustomerInfo customer = new CustomerInfo("FJS1234", "Francisco", "Sayago", "8273 APPLE ORCHARD WAY", "ATLANTA", "GA", "30822", birthdate, "N", 0);
+		boolean result = repo.addNewCustomer(customer);
+		LOGGER.info("test_addNewCustomer_Success: " + result);
+		Assert.assertTrue(result);
+	}
+	
+	@Test
+	public void test_addNewCustomer_Failure() throws SQLException {
+		Date birthdate = Date.valueOf("1992-09-20");
+		CustomerInfo customer = new CustomerInfo("FJS1234", "Francisco", "Sayago", "8273 APPLE ORCHARD WAY", "ATLANTA", "GA", "30822", birthdate, "N", 0);
+		try {
+			repo.addNewCustomer(customer);
+		}
+		catch(SQLException e) {
+			String result = e.getMessage();
+			LOGGER.info("test_addNewCustomer_Failure: " + result);
+			Assert.assertTrue(result.contains("Duplicate entry"));
+		}
+	}
+	
+	@Test
+	public void test_editCustomer_Success() throws SQLException {
+		Date birthdate = Date.valueOf("1992-09-20");
+		CustomerInfo customer = new CustomerInfo("FJS1234", "Francisco", "Sayago", "8273 APPLE ORCHARD WAY", "NEW YORK", "NY", "30822", birthdate, "N", 0);
+		boolean result = repo.editCustomer(customer);
+		LOGGER.info("test_editCustomer_Success: " + result);
+		Assert.assertTrue(result);
+	}
+	
+	@Test
+	public void test_editCustomer_Failure() throws SQLException {
+		Date birthdate = Date.valueOf("1992-09-20");
+		CustomerInfo customer = new CustomerInfo("TEST", "Francisco", "Sayago", "8273 APPLE ORCHARD WAY", "NEW YORK", "NY", "30822", birthdate, "N", 0);
+		boolean result = repo.editCustomer(customer);
+		LOGGER.info("test_editCustomer_Failure: " + result);
+		Assert.assertFalse(result);
+		
 	}
 }
