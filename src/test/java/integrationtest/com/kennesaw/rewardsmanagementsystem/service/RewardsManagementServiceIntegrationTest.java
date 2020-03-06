@@ -90,6 +90,87 @@ public class RewardsManagementServiceIntegrationTest {
 		Assert.assertTrue(responseEntity.getBody().getErrorResponse().getMessage().equals(Constants.MESSAGE_RESOURCE_NOT_AVAILABLE));
 	}
 	
+	@Test
+	public void testPostCustomer_AddCustomer_Success() {	
+		CustomerInfo customerInfo = getCustomerInfo(null);
+		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity entity = new HttpEntity(customerInfo, httpHeaders);
+		
+		RewardsManagementResponse expectedResponse = getSuccessResponse(null);
+		
+		ResponseEntity<RewardsManagementResponse> responseEntity = 
+				testRestTemplate.exchange(createURLWithPort("/rws/postCustomer"),
+						HttpMethod.POST, entity, RewardsManagementResponse.class);
+		
+		LOGGER.info("testPostCustomer_AddCustomer_Success: " + responseEntity.getStatusCodeValue() + ":::" + responseEntity.getBody());
+		LOGGER.info("testPostCustomer_AddCustomer_Success expectedResponse: " + expectedResponse.toString());
+		Assert.assertNotNull(responseEntity.getBody());
+		Assert.assertTrue(responseEntity.getStatusCode().equals(HttpStatus.OK));
+		Assert.assertTrue(responseEntity.getBody().getCustomerInfo().getFirstName().equals(expectedResponse.getCustomerInfo().getFirstName()));
+	}
+	
+	@Test
+	public void testPostCustomer_AddCustomer_BadRequest() {	
+		CustomerInfo customerInfo = getCustomerInfo(null);
+		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity entity = new HttpEntity(httpHeaders);
+		
+		ResponseEntity<RewardsManagementResponse> responseEntity = 
+				testRestTemplate.exchange(createURLWithPort("/rws/postCustomer"),
+						HttpMethod.POST, entity, RewardsManagementResponse.class);
+		
+		LOGGER.info("testPostCustomer_AddCustomer_BadRequest: " + responseEntity.getStatusCodeValue() + ":::" + responseEntity.getBody());
+		Assert.assertNotNull(responseEntity.getBody());
+		Assert.assertTrue(responseEntity.getStatusCode().equals(HttpStatus.BAD_REQUEST));
+	}
+	
+	@Test
+	public void testPostCustomer_UpdateCustomer_Success() {	
+		String customerId = "EXA6777";
+		String city = "AUSTELL";
+		CustomerInfo customerInfo = getCustomerInfo(customerId);
+		customerInfo.setCity(city);
+		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity entity = new HttpEntity(customerInfo, httpHeaders);
+		
+		RewardsManagementResponse expectedResponse = getSuccessResponse(customerId);
+		expectedResponse.getCustomerInfo().setCity(city);
+		
+		ResponseEntity<RewardsManagementResponse> responseEntity = 
+				testRestTemplate.exchange(createURLWithPort("/rws/postCustomer"),
+						HttpMethod.POST, entity, RewardsManagementResponse.class);
+		
+		LOGGER.info("testPostCustomer_UpdateCustomer_Success: " + responseEntity.getStatusCodeValue() + ":::" + responseEntity.getBody());
+		LOGGER.info("testPostCustomer_UpdateCustomer_Success expectedResponse: " + expectedResponse.toString());
+		Assert.assertNotNull(responseEntity.getBody());
+		Assert.assertTrue(responseEntity.getStatusCode().equals(HttpStatus.OK));
+		Assert.assertTrue(responseEntity.getBody().getCustomerInfo().getCity().equals(expectedResponse.getCustomerInfo().getCity()));
+	}
+	
+	@Test
+	public void testPostCustomer_UpdateCustomer_Failure() {	
+		String customerId = "TEST";
+		String city = "AUSTELL";
+		CustomerInfo customerInfo = getCustomerInfo(customerId);
+		customerInfo.setCity(city);
+		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity entity = new HttpEntity(customerInfo, httpHeaders);
+		
+		RewardsManagementResponse expectedResponse = getSuccessResponse(customerId);
+		expectedResponse.getCustomerInfo().setCity(city);
+		
+		ResponseEntity<RewardsManagementResponse> responseEntity = 
+				testRestTemplate.exchange(createURLWithPort("/rws/postCustomer"),
+						HttpMethod.POST, entity, RewardsManagementResponse.class);
+		
+		LOGGER.info("testPostCustomer_UpdateCustomer_Failure: " + responseEntity.getStatusCodeValue() + ":::" + responseEntity.getBody());
+		LOGGER.info("testPostCustomer_UpdateCustomer_Failure expectedResponse: " + expectedResponse.toString());
+		Assert.assertNotNull(responseEntity.getBody());
+		Assert.assertTrue(responseEntity.getStatusCode().equals(HttpStatus.OK));
+		Assert.assertTrue(responseEntity.getBody().getCustomerInfo().getCity().equals(expectedResponse.getCustomerInfo().getCity()));
+		Assert.assertNotNull(responseEntity.getBody().getErrorResponse());
+	}
+	
 	public RewardsManagementResponse getSuccessResponse(String vipId) {
 		RewardsManagementResponse response = new RewardsManagementResponse();
 		response.setCustomerId(vipId);
@@ -131,6 +212,23 @@ public class RewardsManagementServiceIntegrationTest {
 		response.setCustomerId(vipId);
 		response.setErrorResponse(new ErrorResponse(Constants.CODE_RESOURCE_NOT_AVAILABLE, Constants.MESSAGE_RESOURCE_NOT_AVAILABLE));
 		return response;
+	}
+	
+	public CustomerInfo getCustomerInfo(String vipId) {
+
+		String firstName = "Eric";
+		String lastName = "Acevedo";
+		String streetAddress = "8888 VININGS VINTAGE WAY";
+		String city="ATLANTA";
+		String state="GA";
+		String zipCode="30080";
+		String birthday = "1999-02-18";
+		Date birthDate = Date.valueOf(birthday);
+		String goldStatusFlag="Y";
+		int points=300;
+		
+		return new CustomerInfo(vipId, firstName, lastName, streetAddress, city,
+			 state, zipCode, birthDate, goldStatusFlag, points);
 	}
 
 }

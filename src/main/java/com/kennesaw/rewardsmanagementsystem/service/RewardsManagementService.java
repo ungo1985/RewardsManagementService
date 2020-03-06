@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kennesaw.rewardsmanagementsystem.manager.RewardsManager;
+import com.kennesaw.rewardsmanagementsystem.to.CustomerInfo;
 import com.kennesaw.rewardsmanagementsystem.to.RewardsManagementResponse;
 
 import io.swagger.annotations.ApiOperation;
@@ -55,6 +57,22 @@ public class RewardsManagementService {
 	@RequestMapping(method = RequestMethod.GET, path = "/getCustomerAndPurchaseInfo")
 	public @ResponseBody ResponseEntity<?> getCustomerAndPurchaseInfo(@RequestParam(name="vipId", required=true) String vipId) {
 		return new ResponseEntity<>(manager.retrieveCustomerAndPurchaseInfo(vipId), new HttpHeaders(), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "postCustomer", notes = "postCustomer",
+			httpMethod = "POST", consumes = "application/json", produces = "application/json")
+		    @ApiResponses(value = {
+	            @ApiResponse(code = 200, message = "Success", response = RewardsManagementResponse.class),
+	            @ApiResponse(code = 204, message = "Resource Unavailable"),
+	            @ApiResponse(code = 400, message = "Bad Request"),
+	            @ApiResponse(code = 401, message = "Unauthorized"),
+	            @ApiResponse(code = 500, message = "Internal server error"),
+	            @ApiResponse(code = 503, message = "Service Unavailable"),
+	            @ApiResponse(code = 504, message = "Service Time Out")})
+	@CrossOrigin
+	@RequestMapping(method = RequestMethod.POST, path = "/postCustomer")
+	public @ResponseBody ResponseEntity<?> postCustomer(@RequestBody CustomerInfo customer) {
+		return new ResponseEntity<>(manager.processCustomer(customer), new HttpHeaders(), HttpStatus.OK);
 	}
 
 }
