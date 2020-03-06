@@ -45,6 +45,36 @@ public class Repository {
 		return sql;
 	}
 	
+	public String buildInsertSqlStatementForCustomerInfo(CustomerInfo customer) {
+		String sql = "INSERT INTO customer_info VALUES( '" 
+		+ customer.getCustomerId().toUpperCase() + "', '" 
+		+ customer.getFirstName().toUpperCase() + "', '"
+		+ customer.getLastName().toUpperCase() + "', '"
+		+ customer.getStreetAddress().toUpperCase() + "', '"
+		+ customer.getCity().toUpperCase() + "', '"
+		+ customer.getState().toUpperCase() + "', '"
+		+ customer.getZipCode() + "', '"
+		+ customer.getBirthday() + "', "
+		+ customer.getPoints() + " )";
+		LOGGER.info("buildInsertSqlStatementForCustomerInfo: " + sql);
+		return sql;
+	}
+	
+	public String buildUpdateSqlStatementForCustomerInfo(CustomerInfo customer) {
+		String sql = "UPDATE customer_info "
+		+ "SET first_name = '"+customer.getFirstName().toUpperCase()+"', "
+		+ "last_name = '"+customer.getLastName().toUpperCase()+"', "
+		+ "street_address = '"+customer.getStreetAddress().toUpperCase()+"', "
+		+ "city = '"+customer.getCity().toUpperCase()+"', "
+		+ "state = '"+customer.getState().toUpperCase()+"', "
+		+ "zip_code = '"+customer.getZipCode()+"', "
+		+ "birthday = '"+customer.getBirthday()+"', "
+		+ "points = " + customer.getPoints()
+		+ " WHERE customer_id = '"+customer.getCustomerId()+"' ";
+		LOGGER.info("buildUpdateSqlStatementForCustomerInfo: " + sql);
+		return sql;
+	}
+	
 	public String buildSelectSqlStatementForPurchaseInfo(String vipId){
 		String sql = "select items.available_item, items.price, items.type, purchased_items.purchased_date, purchased_items.pre_ordered_flag, purchased_items.customer_id\r\n" + 
 				     "from rms.items JOIN rms.purchased_items ON items.item_id = purchased_items.item_id and purchased_items.customer_id = '" + vipId.toUpperCase() + "'";
@@ -87,6 +117,32 @@ public class Repository {
 			closeDatabaseConnection(con, stmt);
 			purchaseInfo.setPurchasedItems(purchaseList);
 		return purchaseInfo;
+	}
+	
+	public boolean addNewCustomer(CustomerInfo customer) throws SQLException{
+		Connection con = getDatabaseConnection();
+		Statement stmt = getStatement(con);
+		int numberOfRows = stmt.executeUpdate(buildInsertSqlStatementForCustomerInfo(customer));
+		closeDatabaseConnection(con, stmt);
+		if(numberOfRows == 1) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean editCustomer(CustomerInfo customer) throws SQLException {
+		Connection con = getDatabaseConnection();
+		Statement stmt = getStatement(con);
+		int numberOfRows = stmt.executeUpdate(buildUpdateSqlStatementForCustomerInfo(customer));
+		closeDatabaseConnection(con, stmt);
+		if(numberOfRows == 1) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 }
