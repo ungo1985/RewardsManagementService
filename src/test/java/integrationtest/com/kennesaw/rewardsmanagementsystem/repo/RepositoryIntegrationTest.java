@@ -68,7 +68,7 @@ public class RepositoryIntegrationTest {
 	}
 	
 	@Test
-	public void test_addNewCustomer_Failure() throws SQLException {
+	public void test_addNewCustomer_Failure() throws SQLException { //throws an SQLException
 		Date birthdate = Date.valueOf("1992-09-20");
 		CustomerInfo customer = new CustomerInfo("FJS1234", "Francisco", "Sayago", "8273 APPLE ORCHARD WAY", "ATLANTA", "GA", "30822", birthdate, "N", 0);
 		try {
@@ -91,7 +91,7 @@ public class RepositoryIntegrationTest {
 	}
 	
 	@Test
-	public void test_editCustomer_Failure() throws SQLException {
+	public void test_editCustomer_Failure() throws SQLException { //returns false
 		Date birthdate = Date.valueOf("1992-09-20");
 		CustomerInfo customer = new CustomerInfo("TEST", "Francisco", "Sayago", "8273 APPLE ORCHARD WAY", "NEW YORK", "NY", "30822", birthdate, "N", 0);
 		boolean result = repo.editCustomer(customer);
