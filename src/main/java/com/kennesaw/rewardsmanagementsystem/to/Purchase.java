@@ -9,6 +9,7 @@ public class Purchase {
 	private String type;
 	private Date purchasedDate;
 	private String preOrderedFlag;
+	private String customerId;
 	
 	public Purchase(){}
 
@@ -19,6 +20,16 @@ public class Purchase {
 		this.type = type;
 		this.purchasedDate = purchasedDate;
 		this.preOrderedFlag = preOrderedFlag;
+	}
+	
+	public Purchase(String availableItem, Float price, String type, Date purchasedDate, String preOrderedFlag, String customerId) {
+		super();
+		this.availableItem = availableItem;
+		this.price = price;
+		this.type = type;
+		this.purchasedDate = purchasedDate;
+		this.preOrderedFlag = preOrderedFlag;
+		this.customerId = customerId;
 	}
 
 	public String getAvailableItem() {
@@ -61,11 +72,20 @@ public class Purchase {
 		this.preOrderedFlag = preOrderedFlag;
 	}
 
+	public String getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((availableItem == null) ? 0 : availableItem.hashCode());
+		result = prime * result + ((customerId == null) ? 0 : customerId.hashCode());
 		result = prime * result + ((preOrderedFlag == null) ? 0 : preOrderedFlag.hashCode());
 		result = prime * result + ((price == null) ? 0 : price.hashCode());
 		result = prime * result + ((purchasedDate == null) ? 0 : purchasedDate.hashCode());
@@ -86,6 +106,11 @@ public class Purchase {
 			if (other.availableItem != null)
 				return false;
 		} else if (!availableItem.equals(other.availableItem))
+			return false;
+		if (customerId == null) {
+			if (other.customerId != null)
+				return false;
+		} else if (!customerId.equals(other.customerId))
 			return false;
 		if (preOrderedFlag == null) {
 			if (other.preOrderedFlag != null)
@@ -113,6 +138,6 @@ public class Purchase {
 	@Override
 	public String toString() {
 		return "Purchase [availableItem=" + availableItem + ", price=" + price + ", type=" + type + ", purchasedDate="
-				+ purchasedDate + ", preOrderedFlag=" + preOrderedFlag + "]";
+				+ purchasedDate + ", preOrderedFlag=" + preOrderedFlag + ", customerId=" + customerId + "]";
 	}
 }

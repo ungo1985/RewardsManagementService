@@ -215,6 +215,38 @@ public class RewardsManagementServiceIntegrationTest {
 		Assert.assertNotNull(responseEntity.getBody().getErrorResponse());
 	}
 	
+	@Test
+	public void testGenereateDailyPurchaseReport_Success() {		
+		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity entity = new HttpEntity(httpHeaders);
+				
+		ResponseEntity<RewardsManagementResponse> responseEntity = 
+				testRestTemplate.exchange(createURLWithPort("/rws/genereateDailyPurchaseReport"),
+						HttpMethod.GET, entity, RewardsManagementResponse.class);
+		
+		LOGGER.info("testGenereateDailyPurchaseReport_Success: " + responseEntity.getStatusCodeValue() + ":::" + responseEntity.getBody());
+		Assert.assertNotNull(responseEntity.getBody());
+		Assert.assertTrue(responseEntity.getStatusCode().equals(HttpStatus.OK));
+		Assert.assertTrue(responseEntity.getBody().getPurchaseInfo().getPurchasedItems().size()>0);
+	}
+	
+	@Test
+	public void testGenereateDailyPurchaseReport_Failure_ResourceNotAvailable() {		
+		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity entity = new HttpEntity(httpHeaders);
+				
+		ResponseEntity<RewardsManagementResponse> responseEntity = 
+				testRestTemplate.exchange(createURLWithPort("/rws/genereateDailyPurchaseReport"),
+						HttpMethod.GET, entity, RewardsManagementResponse.class);
+		
+		LOGGER.info("testGenereateDailyPurchaseReport_Failure_ResourceNotAvailable: " + responseEntity.getStatusCodeValue() + ":::" + responseEntity.getBody());
+		Assert.assertNotNull(responseEntity.getBody());
+		Assert.assertNotNull(responseEntity.getBody().getErrorResponse());
+		Assert.assertTrue(responseEntity.getStatusCode().equals(HttpStatus.OK));
+		Assert.assertTrue(responseEntity.getBody().getErrorResponse().getCode() == Constants.CODE_RESOURCE_NOT_AVAILABLE);
+		Assert.assertTrue(responseEntity.getBody().getErrorResponse().getMessage().equals(Constants.MESSAGE_RESOURCE_NOT_AVAILABLE));
+	}
+	
 	public RewardsManagementResponse getSuccessResponse(String vipId) {
 		RewardsManagementResponse response = new RewardsManagementResponse();
 		response.setCustomerId(vipId);

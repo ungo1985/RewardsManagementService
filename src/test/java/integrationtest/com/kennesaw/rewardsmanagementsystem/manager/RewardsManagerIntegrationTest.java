@@ -127,6 +127,27 @@ public class RewardsManagerIntegrationTest {
 		Assert.assertNotNull(response.getErrorResponse());
 	}
 	
+	@Test
+	public void test_generateDailyPurchaseReport_Success() {
+		RewardsManagementResponse response = manager.generateDailyPurchaseReport();
+		LOGGER.info("test_generateDailyPurchaseReport_Success: " + response.toString());
+		Assert.assertNotNull(response);
+		Assert.assertNotNull(response.getPurchaseInfo());
+		Assert.assertNotNull(response.getPurchaseInfo().getPurchasedItems());
+		Assert.assertTrue(response.getPurchaseInfo().getPurchasedItems().size()>0);
+		Assert.assertNull(response.getErrorResponse());
+	}
+	
+	@Test
+	public void test_generateDailyPurchaseReport_Failure() {
+		RewardsManagementResponse response = manager.generateDailyPurchaseReport();
+		LOGGER.info("test_generateDailyPurchaseReport_Failure: " + response.toString());
+		Assert.assertNotNull(response);
+		Assert.assertNotNull(response.getErrorResponse());
+		Assert.assertTrue(response.getErrorResponse().getCode()==Constants.CODE_RESOURCE_NOT_AVAILABLE);
+		Assert.assertTrue(response.getErrorResponse().getMessage().equals(Constants.MESSAGE_RESOURCE_NOT_AVAILABLE));
+	}
+	
 	public CustomerInfo getValidCustomerInfo(String vipId, String firstName, String lastName) {
 		Date birthdate = Date.valueOf("1992-09-20");
 		CustomerInfo customer = new CustomerInfo(vipId, firstName, lastName, "1234 Cumberland Parkway", "Atlanta",

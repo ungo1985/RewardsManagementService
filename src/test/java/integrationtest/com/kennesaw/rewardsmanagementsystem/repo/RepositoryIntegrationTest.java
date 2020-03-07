@@ -115,4 +115,18 @@ public class RepositoryIntegrationTest {
 		LOGGER.info("test_deleteCustomer_Failure: " + result);
 		Assert.assertFalse(result);
 	}
+	
+	@Test
+	public void test_getDailyPurchases_Success() throws SQLException {
+		PurchaseInfo purchaseInfo = repo.getDailyPurchases();
+		LOGGER.info("test_getDailyPurchases_Success: " + purchaseInfo.toString());
+		Assert.assertTrue(purchaseInfo.getPurchasedItems().size()>0);
+	}
+	
+	@Test
+	public void test_getDailyPurchases_Failure() throws SQLException {
+		PurchaseInfo purchaseInfo = repo.getDailyPurchases();
+		LOGGER.info("test_getDailyPurchases_Failure: " + purchaseInfo.toString());
+		Assert.assertTrue(purchaseInfo.getPurchasedItems().size()==0);
+	}
 }

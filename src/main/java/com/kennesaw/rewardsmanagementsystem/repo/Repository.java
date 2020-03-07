@@ -82,6 +82,13 @@ public class Repository {
 		return sql;
 	}
 	
+	public String buildSelectSqlStatementForDailyPurchases(){
+		String sql = "select items.available_item, items.price, items.type, purchased_items.purchased_date, purchased_items.pre_ordered_flag, purchased_items.customer_id\r\n" + 
+			         "from rms.items JOIN rms.purchased_items ON items.item_id = purchased_items.item_id and purchased_date = curdate()";
+		LOGGER.info("buildSelectSqlStatementForDailyPurchases: " + sql);
+		return sql;
+	}
+	
 	public String buildDeleteSqlStatementForPurchaseInfo(String vipId){
 		String sql = "delete from purchased_items where customer_id = '" + vipId.toUpperCase() + "'";
 		LOGGER.info("buildDeleteSqlStatementForPurchaseInfo: " + sql);
@@ -193,6 +200,25 @@ public class Repository {
 			LOGGER.info("Exception occurred in deleteCustomer method: " + e.getMessage());
 		}
 		return result;
+	}
+	
+	public PurchaseInfo getDailyPurchases() throws SQLException {
+		
+		PurchaseInfo purchaseInfo = new PurchaseInfo();
+		List<Purchase> purchaseList = new ArrayList<Purchase>();
+		Purchase purchase = new Purchase();
+
+			Connection con = getDatabaseConnection();
+			Statement stmt = getStatement(con);
+			ResultSet rs = stmt.executeQuery(buildSelectSqlStatementForDailyPurchases());
+
+			while(rs.next()){
+				purchase = new Purchase(rs.getString("available_item"), rs.getFloat("price"), rs.getString("type"), rs.getDate("purchased_date"), rs.getString("pre_ordered_flag"), rs.getString("customer_id"));
+				purchaseList.add(purchase);
+			}
+			closeDatabaseConnection(con, stmt);
+			purchaseInfo.setPurchasedItems(purchaseList);
+		return purchaseInfo;
 	}
 
 }

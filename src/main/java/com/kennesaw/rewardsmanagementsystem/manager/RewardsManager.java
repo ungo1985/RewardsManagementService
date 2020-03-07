@@ -112,6 +112,21 @@ public class RewardsManager {
 		return response;
 	}
 	
+	public RewardsManagementResponse generateDailyPurchaseReport() {
+		RewardsManagementResponse response = new RewardsManagementResponse();
+		try {
+			PurchaseInfo purchaseInfo = repo.getDailyPurchases();
+			response.setPurchaseInfo(purchaseInfo);
+			if(purchaseInfo.getPurchasedItems().size()==0) {response.setErrorResponse(getErrorResponse(Constants.CODE_RESOURCE_NOT_AVAILABLE, Constants.MESSAGE_RESOURCE_NOT_AVAILABLE));}
+		}
+		catch(SQLException e) {
+			LOGGER.info("Exception occurred during generateDailyPurchaseReport: " + e.getMessage());
+			response.setErrorResponse(getErrorResponse(Constants.CODE_SERVICE_ERROR, Constants.MESSAGE_SERVICE_ERROR));
+		}
+		
+		return response;
+	}
+	
 	
 
 }
