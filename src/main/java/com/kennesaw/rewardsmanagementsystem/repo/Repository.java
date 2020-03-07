@@ -82,6 +82,18 @@ public class Repository {
 		return sql;
 	}
 	
+	public String buildDeleteSqlStatementForPurchaseInfo(String vipId){
+		String sql = "delete from purchased_items where customer_id = '" + vipId.toUpperCase() + "'";
+		LOGGER.info("buildDeleteSqlStatementForPurchaseInfo: " + sql);
+		return sql;
+	}
+	
+	public String buildDeleteSqlStatementForCustomerInfo(String vipId){
+		String sql = "delete from customer_info where customer_id = '" + vipId.toUpperCase() + "'";
+		LOGGER.info("buildDeleteSqlStatementForCustomerInfo: " + sql);
+		return sql;
+	}
+	
 	private Connection getDatabaseConnection() {
 		Connection con = null;
 		con = dbConfig.getConnection();
@@ -143,6 +155,44 @@ public class Repository {
 		else {
 			return false;
 		}
+	}
+	
+	public boolean deletePurchaseInfo(String customerId) throws SQLException{
+		Connection con = getDatabaseConnection();
+		Statement stmt = getStatement(con);
+		int numberOfRows = stmt.executeUpdate(buildDeleteSqlStatementForPurchaseInfo(customerId));
+		closeDatabaseConnection(con, stmt);
+		if(numberOfRows > 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public boolean deleteCustomerInfo(String customerId) throws SQLException{
+		Connection con = getDatabaseConnection();
+		Statement stmt = getStatement(con);
+		int numberOfRows = stmt.executeUpdate(buildDeleteSqlStatementForCustomerInfo(customerId));
+		closeDatabaseConnection(con, stmt);
+		if(numberOfRows > 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean deleteCustomer(String customerId) {
+		boolean result = false;
+		try {
+			deletePurchaseInfo(customerId);
+			result = deleteCustomerInfo(customerId);
+		}
+		catch(SQLException e) {
+			LOGGER.info("Exception occurred in deleteCustomer method: " + e.getMessage());
+		}
+		return result;
 	}
 
 }

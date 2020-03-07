@@ -99,4 +99,20 @@ public class RepositoryIntegrationTest {
 		Assert.assertFalse(result);
 		
 	}
+	
+	@Test
+	public void test_deleteCustomer_Success() throws SQLException {
+		String vipId = "HXC6779";
+		boolean result = repo.deleteCustomer(vipId);
+		LOGGER.info("test_deleteCustomer_Success: " + result);
+		Assert.assertTrue(result);
+	}
+	
+	@Test
+	public void test_deleteCustomer_Failure() throws SQLException {
+		String vipId = "HXC6779";
+		boolean result = repo.deleteCustomer(vipId);
+		LOGGER.info("test_deleteCustomer_Failure: " + result);
+		Assert.assertFalse(result);
+	}
 }
