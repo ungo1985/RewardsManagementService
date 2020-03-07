@@ -104,6 +104,14 @@ public class RewardsManager {
 		return response;
 	}
 	
+	public RewardsManagementResponse deleteCustomer(String vipId) {
+		RewardsManagementResponse response = new RewardsManagementResponse();
+		response.setCustomerId(vipId);
+		boolean result = repo.deleteCustomer(vipId);
+		if(!result) {response.setErrorResponse(getErrorResponse(Constants.CODE_SERVICE_ERROR, Constants.MESSAGE_SERVICE_ERROR));}
+		return response;
+	}
+	
 	
 
 }

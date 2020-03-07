@@ -74,5 +74,21 @@ public class RewardsManagementService {
 	public @ResponseBody ResponseEntity<?> postCustomer(@RequestBody CustomerInfo customer) {
 		return new ResponseEntity<>(manager.processCustomer(customer), new HttpHeaders(), HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "deleteCustomer", notes = "deleteCustomer",
+			httpMethod = "DELETE", consumes = "application/json", produces = "application/json")
+		    @ApiResponses(value = {
+	            @ApiResponse(code = 200, message = "Success", response = RewardsManagementResponse.class),
+	            @ApiResponse(code = 204, message = "Resource Unavailable"),
+	            @ApiResponse(code = 400, message = "Bad Request"),
+	            @ApiResponse(code = 401, message = "Unauthorized"),
+	            @ApiResponse(code = 500, message = "Internal server error"),
+	            @ApiResponse(code = 503, message = "Service Unavailable"),
+	            @ApiResponse(code = 504, message = "Service Time Out")})
+	@CrossOrigin
+	@RequestMapping(method = RequestMethod.DELETE, path = "/deleteCustomer")
+	public @ResponseBody ResponseEntity<?> deleteCustomer(@RequestParam(name="vipId", required=true) String vipId) {
+		return new ResponseEntity<>(manager.deleteCustomer(vipId), new HttpHeaders(), HttpStatus.OK);
+	}
 
 }

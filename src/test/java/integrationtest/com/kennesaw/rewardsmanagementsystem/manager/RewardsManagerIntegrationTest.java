@@ -105,6 +105,28 @@ public class RewardsManagerIntegrationTest {
 		Assert.assertNotNull(response.getErrorResponse());
 	}
 	
+	@Test
+	public void test_deleteCustomer_Success() {
+		String vipId = "PXN6778";
+		RewardsManagementResponse response = manager.deleteCustomer(vipId);
+		LOGGER.info("test_deleteCustomer_Success: " + response.toString());
+		Assert.assertNotNull(response);
+		Assert.assertNull(response.getCustomerInfo());
+		Assert.assertNull(response.getPurchaseInfo());
+		Assert.assertNull(response.getErrorResponse());
+	}
+	
+	@Test
+	public void test_deleteCustomer_Failure() {
+		String vipId = "PXN6778";
+		RewardsManagementResponse response = manager.deleteCustomer(vipId);
+		LOGGER.info("test_deleteCustomer_Failure: " + response.toString());
+		Assert.assertNotNull(response);
+		Assert.assertNull(response.getCustomerInfo());
+		Assert.assertNull(response.getPurchaseInfo());
+		Assert.assertNotNull(response.getErrorResponse());
+	}
+	
 	public CustomerInfo getValidCustomerInfo(String vipId, String firstName, String lastName) {
 		Date birthdate = Date.valueOf("1992-09-20");
 		CustomerInfo customer = new CustomerInfo(vipId, firstName, lastName, "1234 Cumberland Parkway", "Atlanta",

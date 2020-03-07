@@ -171,6 +171,50 @@ public class RewardsManagementServiceIntegrationTest {
 		Assert.assertNotNull(responseEntity.getBody().getErrorResponse());
 	}
 	
+	@Test
+	public void testDeleteCustomer_Success() {
+		String vipId = "PXX6774";
+		
+		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity entity = new HttpEntity(httpHeaders);
+		
+		RewardsManagementResponse expectedResponse = new RewardsManagementResponse();
+		expectedResponse.setCustomerId(vipId);
+		
+		ResponseEntity<RewardsManagementResponse> responseEntity = 
+				testRestTemplate.exchange(createURLWithPort("/rws/deleteCustomer?vipId=" + vipId),
+						HttpMethod.DELETE, entity, RewardsManagementResponse.class);
+		
+		LOGGER.info("testDeleteCustomer_Success: " + responseEntity.getStatusCodeValue() + ":::" + responseEntity.getBody());
+		LOGGER.info("testDeleteCustomer_Success expectedResponse: " + expectedResponse.toString());
+		Assert.assertNotNull(responseEntity.getBody());
+		Assert.assertTrue(responseEntity.getStatusCode().equals(HttpStatus.OK));
+		Assert.assertTrue(responseEntity.getBody().getCustomerId().equalsIgnoreCase(expectedResponse.getCustomerId()));
+		Assert.assertNull(responseEntity.getBody().getErrorResponse());
+	}
+	
+	@Test
+	public void testDeleteCustomer_Failure() {
+		String vipId = "PXX6774";
+		
+		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity entity = new HttpEntity(httpHeaders);
+		
+		RewardsManagementResponse expectedResponse = new RewardsManagementResponse();
+		expectedResponse.setCustomerId(vipId);
+		
+		ResponseEntity<RewardsManagementResponse> responseEntity = 
+				testRestTemplate.exchange(createURLWithPort("/rws/deleteCustomer?vipId=" + vipId),
+						HttpMethod.DELETE, entity, RewardsManagementResponse.class);
+		
+		LOGGER.info("testDeleteCustomer_Failure: " + responseEntity.getStatusCodeValue() + ":::" + responseEntity.getBody());
+		LOGGER.info("testDeleteCustomer_Failure expectedResponse: " + expectedResponse.toString());
+		Assert.assertNotNull(responseEntity.getBody());
+		Assert.assertTrue(responseEntity.getStatusCode().equals(HttpStatus.OK));
+		Assert.assertTrue(responseEntity.getBody().getCustomerId().equalsIgnoreCase(expectedResponse.getCustomerId()));
+		Assert.assertNotNull(responseEntity.getBody().getErrorResponse());
+	}
+	
 	public RewardsManagementResponse getSuccessResponse(String vipId) {
 		RewardsManagementResponse response = new RewardsManagementResponse();
 		response.setCustomerId(vipId);
