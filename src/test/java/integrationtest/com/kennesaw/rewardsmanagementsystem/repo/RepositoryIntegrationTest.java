@@ -129,4 +129,22 @@ public class RepositoryIntegrationTest {
 		LOGGER.info("test_getDailyPurchases_Failure: " + purchaseInfo.toString());
 		Assert.assertTrue(purchaseInfo.getPurchasedItems().size()==0);
 	}
+	
+	@Test
+	public void test_getMonthlyPointsForCustomer_Success() throws SQLException {
+		String vipId = "EXA6777";
+		CustomerInfo customerInfo = repo.getMonthlyPointsForCustomer(vipId);
+		LOGGER.info("test_getMonthlyPointsForCustomer_Success: " + customerInfo.getMonthlyPoints());
+		Assert.assertTrue(customerInfo.getCustomerId().equalsIgnoreCase(vipId));
+		Assert.assertTrue(customerInfo.getMonthlyPoints()>0);
+	}
+	
+	@Test
+	public void test_getMonthlyPointsForCustomer_Failure() throws SQLException {
+		String vipId = "TEST";
+		CustomerInfo customerInfo = repo.getMonthlyPointsForCustomer(vipId);
+		LOGGER.info("test_getMonthlyPointsForCustomer_Failure: " + customerInfo.getMonthlyPoints());
+		Assert.assertTrue(customerInfo.getCustomerId().equalsIgnoreCase(vipId));
+		Assert.assertTrue(customerInfo.getMonthlyPoints()==0);
+	}
 }

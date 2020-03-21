@@ -14,6 +14,7 @@ public class CustomerInfo {
 	private Date birthday;
 	private String goldStatusFlag;
 	private int points;
+	private int monthlyPoints;
 	
 	public CustomerInfo() {}
 
@@ -30,6 +31,12 @@ public class CustomerInfo {
 		this.birthday = birthday;
 		this.goldStatusFlag = goldStatusFlag;
 		this.points = points;
+	}
+
+	public CustomerInfo(String customerId, int monthlyPoints) {
+		super();
+		this.customerId = customerId;
+		this.monthlyPoints = monthlyPoints;
 	}
 
 	public String getCustomerId() {
@@ -112,6 +119,14 @@ public class CustomerInfo {
 		this.points = points;
 	}
 
+	public int getMonthlyPoints() {
+		return monthlyPoints;
+	}
+
+	public void setMonthlyPoints(int monthlyPoints) {
+		this.monthlyPoints = monthlyPoints;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -122,6 +137,7 @@ public class CustomerInfo {
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((goldStatusFlag == null) ? 0 : goldStatusFlag.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + monthlyPoints;
 		result = prime * result + points;
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		result = prime * result + ((streetAddress == null) ? 0 : streetAddress.hashCode());
@@ -168,6 +184,8 @@ public class CustomerInfo {
 				return false;
 		} else if (!lastName.equals(other.lastName))
 			return false;
+		if (monthlyPoints != other.monthlyPoints)
+			return false;
 		if (points != other.points)
 			return false;
 		if (state == null) {
@@ -192,7 +210,8 @@ public class CustomerInfo {
 	public String toString() {
 		return "CustomerInfo [customerId=" + customerId + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", streetAddress=" + streetAddress + ", city=" + city + ", state=" + state + ", zipCode=" + zipCode
-				+ ", birthday=" + birthday + ", goldStatusFlag=" + goldStatusFlag + ", points=" + points + "]";
+				+ ", birthday=" + birthday + ", goldStatusFlag=" + goldStatusFlag + ", points=" + points
+				+ ", monthlyPoints=" + monthlyPoints + "]";
 	}
 	
 

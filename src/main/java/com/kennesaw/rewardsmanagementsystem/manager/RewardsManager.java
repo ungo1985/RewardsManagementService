@@ -30,6 +30,8 @@ public class RewardsManager {
 		
 		try {
 			CustomerInfo customerInfo = repo.getCustomerInformation(vipId);
+			CustomerInfo monthlyPointsCustInfo = repo.getMonthlyPointsForCustomer(vipId);
+			customerInfo.setMonthlyPoints(monthlyPointsCustInfo.getMonthlyPoints());
 			checkGoldStatus(customerInfo);
 			PurchaseInfo purchaseInfo = repo.getPurchaseInfo(vipId);
 			response.setCustomerInfo(customerInfo);

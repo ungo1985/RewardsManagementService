@@ -82,6 +82,13 @@ public class Repository {
 		return sql;
 	}
 	
+	public String buildSelectSqlStatementForMonthlyPoints(String vipId){
+		String sql = "select FLOOR(SUM(price)) monthlyPoints\r\n" + 
+				     "from rms.items JOIN rms.purchased_items ON items.item_id = purchased_items.item_id and purchased_items.customer_id = '" + vipId.toUpperCase() + "' and MONTH(purchased_items.purchased_date) = MONTH(curdate())";
+		LOGGER.info("buildSelectSqlStatementForPurchaseInfo: " + sql);
+		return sql;
+	}
+	
 	public String buildSelectSqlStatementForDailyPurchases(){
 		String sql = "select items.available_item, items.price, items.type, purchased_items.purchased_date, purchased_items.pre_ordered_flag, purchased_items.customer_id\r\n" + 
 			         "from rms.items JOIN rms.purchased_items ON items.item_id = purchased_items.item_id and purchased_date = curdate()";
@@ -219,6 +226,20 @@ public class Repository {
 			closeDatabaseConnection(con, stmt);
 			purchaseInfo.setPurchasedItems(purchaseList);
 		return purchaseInfo;
+	}
+
+	public CustomerInfo getMonthlyPointsForCustomer(String vipId) throws SQLException{
+		CustomerInfo customerInfo = new CustomerInfo(vipId, 0);
+
+			Connection con = getDatabaseConnection();
+			Statement stmt = getStatement(con);
+			ResultSet rs = stmt.executeQuery(buildSelectSqlStatementForMonthlyPoints(vipId));
+
+			if(rs.next()){
+				customerInfo = new CustomerInfo(vipId, rs.getInt("monthlyPoints"));
+			}
+			closeDatabaseConnection(con, stmt);	
+		return customerInfo;
 	}
 
 }
