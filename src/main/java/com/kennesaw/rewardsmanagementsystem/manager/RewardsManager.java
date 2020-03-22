@@ -31,8 +31,13 @@ public class RewardsManager {
 		try {
 			CustomerInfo customerInfo = repo.getCustomerInformation(vipId);
 			CustomerInfo monthlyPointsCustInfo = repo.getMonthlyPointsForCustomer(vipId);
-			customerInfo.setMonthlyPoints(monthlyPointsCustInfo.getMonthlyPoints());
 			checkGoldStatus(customerInfo);
+			//If customer has gold status, then double the earned points as per requirements
+			if(customerInfo.getGoldStatusFlag().equals(Constants.goldStatus)) {
+				int doubledMonthlyPoints = monthlyPointsCustInfo.getMonthlyPoints() * 2;
+				customerInfo.setMonthlyPoints(doubledMonthlyPoints);
+			}
+			else {customerInfo.setMonthlyPoints(monthlyPointsCustInfo.getMonthlyPoints());}
 			PurchaseInfo purchaseInfo = repo.getPurchaseInfo(vipId);
 			response.setCustomerInfo(customerInfo);
 			response.setPurchaseInfo(purchaseInfo);
