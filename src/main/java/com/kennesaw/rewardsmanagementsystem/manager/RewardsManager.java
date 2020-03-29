@@ -33,7 +33,7 @@ public class RewardsManager {
 			CustomerInfo monthlyPointsCustInfo = repo.getMonthlyPointsForCustomer(vipId);
 			checkGoldStatus(customerInfo);
 			//If customer has gold status, then double the earned points as per requirements
-			if(customerInfo.getGoldStatusFlag().equals(Constants.goldStatus)) {
+			if(!StringUtils.isEmpty(customerInfo.getGoldStatusFlag()) && customerInfo.getGoldStatusFlag().equals(Constants.goldStatus)) {
 				int doubledMonthlyPoints = monthlyPointsCustInfo.getMonthlyPoints() * 2;
 				customerInfo.setMonthlyPoints(doubledMonthlyPoints);
 			}
