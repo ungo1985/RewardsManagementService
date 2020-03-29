@@ -56,7 +56,7 @@ dependencyManagement {
 
 test {
 	outputs.dir snippetsDir
-	useJUnitPlatform()
+	testLogging.showStandardStreams = true
 }
 
 asciidoctor {
